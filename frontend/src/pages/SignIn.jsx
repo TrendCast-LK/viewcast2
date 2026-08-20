@@ -58,6 +58,10 @@ export default function SignIn() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-secondary-fixed opacity-30 blur-[100px]" />
       </div>
 
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
+
       <main className="w-full max-w-[480px] px-margin-mobile md:px-0 z-10 relative">
         <div className="glass-card rounded-xl p-8 md:p-12 w-full transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,0,0,0.08)]">
           <div className="text-center mb-8">
