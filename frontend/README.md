@@ -27,6 +27,8 @@ and predictions (see **Backend integration** below).
 | `/dashboard` | Dashboard — real name/subscriber/view stats + recent predictions | ✓ |
 | `/new-prediction` | Create New Prediction (form, incl. file upload) | ✓ |
 | `/prediction-result/:id` | Prediction Results (real forecast + chart) | ✓ |
+| `/trends` | Trends — stat tiles, views-over-time chart, category breakdown | ✓ |
+| `/settings` | Settings — edit profile/channel stats, change password | ✓ |
 
 Protected routes redirect to Sign In if there's no session (`RequireAuth` /
 `AuthContext`), and back to the page you wanted after logging in.
