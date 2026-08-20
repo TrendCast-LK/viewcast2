@@ -5,6 +5,8 @@ import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import * as api from "../lib/api";
 import { formatCompact } from "../lib/format";
+import { chartColors } from "../lib/chartTheme";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Trends() {
   const [summary, setSummary] = useState(null);
@@ -12,6 +14,7 @@ export default function Trends() {
   const [error, setError] = useState(null);
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     let cancelled = false;
@@ -35,9 +38,10 @@ export default function Trends() {
     if (!summary || !canvasRef.current || summary.timeline.length === 0) return;
 
     const ctx = canvasRef.current.getContext("2d");
+    const colors = chartColors(theme === "dark");
     const gradient = ctx.createLinearGradient(0, 0, 0, 320);
-    gradient.addColorStop(0, "rgba(70, 72, 212, 0.45)");
-    gradient.addColorStop(1, "rgba(70, 72, 212, 0.0)");
+    gradient.addColorStop(0, colors.gradientTop);
+    gradient.addColorStop(1, colors.gradientBottom);
 
     chartRef.current = new Chart(ctx, {
       type: "line",
@@ -47,11 +51,11 @@ export default function Trends() {
           {
             label: "Predicted Views",
             data: summary.timeline.map((p) => p.predicted_views),
-            borderColor: "#4648d4",
+            borderColor: colors.line,
             backgroundColor: gradient,
             borderWidth: 3,
             pointBackgroundColor: "#ffffff",
-            pointBorderColor: "#b4136d",
+            pointBorderColor: colors.point,
             pointBorderWidth: 2,
             pointRadius: 5,
             pointHoverRadius: 7,
@@ -66,7 +70,7 @@ export default function Trends() {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: "rgba(25, 28, 30, 0.9)",
+            backgroundColor: colors.tooltipBg,
             titleFont: { family: "Geist", size: 13 },
             bodyFont: { family: "Inter", size: 13 },
             padding: 10,
@@ -80,14 +84,14 @@ export default function Trends() {
         scales: {
           y: {
             beginAtZero: true,
-            grid: { color: "rgba(199, 196, 215, 0.2)", drawBorder: false },
-            ticks: { font: { family: "Geist", size: 11 }, color: "#6c748b", callback: (v) => formatCompact(v) },
+            grid: { color: colors.grid, drawBorder: false },
+            ticks: { font: { family: "Geist", size: 11 }, color: colors.tick, callback: (v) => formatCompact(v) },
           },
           x: {
             grid: { display: false, drawBorder: false },
             ticks: {
               font: { family: "Geist", size: 11 },
-              color: "#6c748b",
+              color: colors.tick,
               callback: function (value) {
                 const label = this.getLabelForValue(value);
                 return label.length > 14 ? `${label.slice(0, 14)}…` : label;
@@ -100,7 +104,7 @@ export default function Trends() {
     });
 
     return () => chartRef.current?.destroy();
-  }, [summary]);
+  }, [summary, theme]);
 
   return (
     <div className="bg-background text-on-background min-h-screen font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">

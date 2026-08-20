@@ -5,6 +5,8 @@ import Sidebar from "../components/Sidebar";
 import ResultsTopbar from "../components/ResultsTopbar";
 import * as api from "../lib/api";
 import { formatCompact, formatSignedPercent } from "../lib/format";
+import { chartColors } from "../lib/chartTheme";
+import { useTheme } from "../context/ThemeContext";
 
 const PLACEHOLDER_THUMBNAIL =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDiLpShN4XgeCCGMTWX7S5lrv3G0lqBcxQjRjdTOCL1gCVpB__fhYEG_7YGolU-oSbAbmpChoPuCl7oI_lDLekL3xXjQbxhBTlTByJFaHrdgqzMLZR9_pyh4ryDGvgZMb_dMdCgja8lDxjZpI_q_pr0G8N_sRNDGLxyD3eCdlVaQzs3LS0HTO_y5XjmP_JVtwt_zGQWlQ_9KIskQ87a9p6xAiuaRsU2WpK21ZPvjQGnvYdNr407QAA";
@@ -14,6 +16,7 @@ export default function PredictionResult() {
   const navigate = useNavigate();
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
+  const { theme } = useTheme();
 
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,10 +54,11 @@ export default function PredictionResult() {
     const data = trajectory.map((p) => p.views);
 
     const ctx = canvasRef.current.getContext("2d");
+    const colors = chartColors(theme === "dark");
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, "rgba(70, 72, 212, 0.5)");
-    gradient.addColorStop(1, "rgba(70, 72, 212, 0.0)");
+    gradient.addColorStop(0, colors.gradientTop);
+    gradient.addColorStop(1, colors.gradientBottom);
 
     chartRef.current = new Chart(ctx, {
       type: "line",
@@ -64,11 +68,11 @@ export default function PredictionResult() {
           {
             label: "Predicted Views",
             data,
-            borderColor: "#4648d4",
+            borderColor: colors.line,
             backgroundColor: gradient,
             borderWidth: 3,
             pointBackgroundColor: "#ffffff",
-            pointBorderColor: "#b4136d",
+            pointBorderColor: colors.point,
             pointBorderWidth: 2,
             pointRadius: 5,
             pointHoverRadius: 7,
@@ -83,7 +87,7 @@ export default function PredictionResult() {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: "rgba(25, 28, 30, 0.9)",
+            backgroundColor: colors.tooltipBg,
             titleFont: { family: "Geist", size: 14 },
             bodyFont: { family: "Inter", size: 14 },
             padding: 12,
@@ -107,16 +111,16 @@ export default function PredictionResult() {
         scales: {
           y: {
             beginAtZero: true,
-            grid: { color: "rgba(199, 196, 215, 0.2)", drawBorder: false },
+            grid: { color: colors.grid, drawBorder: false },
             ticks: {
               font: { family: "Geist", size: 12 },
-              color: "#6c748b",
+              color: colors.tick,
               callback: (value) => (value === 0 ? "0" : `${(value / 1000000).toFixed(1)}M`),
             },
           },
           x: {
             grid: { display: false, drawBorder: false },
-            ticks: { font: { family: "Geist", size: 12 }, color: "#6c748b" },
+            ticks: { font: { family: "Geist", size: 12 }, color: colors.tick },
           },
         },
         interaction: { intersect: false, mode: "index" },
@@ -124,7 +128,7 @@ export default function PredictionResult() {
     });
 
     return () => chartRef.current?.destroy();
-  }, [prediction]);
+  }, [prediction, theme]);
 
   if (loading) {
     return (
