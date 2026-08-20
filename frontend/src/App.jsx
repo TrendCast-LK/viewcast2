@@ -4,6 +4,8 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import NewPrediction from "./pages/NewPrediction";
 import PredictionResult from "./pages/PredictionResult";
+import Trends from "./pages/Trends";
+import Settings from "./pages/Settings";
 import RequireAuth from "./components/RequireAuth";
 
 export default function App() {
@@ -33,6 +35,22 @@ export default function App() {
         element={
           <RequireAuth>
             <PredictionResult />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/trends"
+        element={
+          <RequireAuth>
+            <Trends />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <RequireAuth>
+            <Settings />
           </RequireAuth>
         }
       />
