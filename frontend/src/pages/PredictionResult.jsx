@@ -151,17 +151,17 @@ export default function PredictionResult() {
   const changeIcon = (prediction.change_vs_avg ?? 0) >= 0 ? "trending_up" : "trending_down";
 
   return (
-    <div className="bg-surface dark:bg-inverse-surface text-on-surface dark:text-inverse-on-surface font-body-md text-body-md antialiased min-h-screen">
+    <div className="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen">
       <ResultsTopbar />
       <Sidebar active="predictions" />
 
       <main className="md:ml-64 pt-24 px-margin-mobile md:px-margin-desktop pb-20 max-w-container-max mx-auto min-h-screen flex flex-col gap-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 w-full">
           <div>
-            <p className="font-label-md text-label-md text-primary dark:text-primary-fixed-dim uppercase tracking-wider mb-2 flex items-center gap-2">
+            <p className="font-label-md text-label-md text-primary uppercase tracking-wider mb-2 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm">check_circle</span> Analysis Complete
             </p>
-            <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-on-primary-container">
+            <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
               Prediction Results
             </h2>
           </div>
