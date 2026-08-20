@@ -93,10 +93,31 @@ export function me() {
   return request("/auth/me");
 }
 
+export function updateProfile({ fullName, subscribers, monthlyViews }) {
+  const json = {};
+  if (fullName !== undefined) json.full_name = fullName;
+  if (subscribers !== undefined) json.subscribers = subscribers;
+  if (monthlyViews !== undefined) json.monthly_views = monthlyViews;
+  return request("/auth/me", { method: "PATCH", json });
+}
+
+export function changePassword({ currentPassword, newPassword }) {
+  return request("/auth/change-password", {
+    method: "POST",
+    json: { current_password: currentPassword, new_password: newPassword },
+  });
+}
+
 // ---- Dashboard ------------------------------------------------------------
 
 export function getDashboardSummary() {
   return request("/dashboard/summary");
+}
+
+// ---- Trends -----------------------------------------------------------------
+
+export function getTrendsSummary() {
+  return request("/trends/summary");
 }
 
 // ---- Predictions ----------------------------------------------------------
