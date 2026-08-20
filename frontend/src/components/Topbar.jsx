@@ -1,3 +1,5 @@
+import ThemeToggle from "./ThemeToggle";
+
 export default function Topbar({ searchPlaceholder = "Search predictions...", avatarUrl }) {
   return (
     <header className="fixed top-0 right-0 w-full z-40 bg-surface/70 backdrop-blur-xl shadow-sm flex justify-between items-center h-16 px-margin-desktop ml-64 pl-[calc(16rem+40px)]">
@@ -14,6 +16,7 @@ export default function Topbar({ searchPlaceholder = "Search predictions...", av
         </div>
       </div>
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         <button className="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-colors active:scale-95">
           <span className="material-symbols-outlined">notifications</span>
         </button>
