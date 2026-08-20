@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import * as api from "../lib/api";
 import { ApiError } from "../lib/api";
 
@@ -20,14 +21,55 @@ export default function Settings() {
           </p>
           <h2 className="font-headline-lg text-headline-lg text-on-background">Settings</h2>
           <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-            Manage your profile, channel stats, and password.
+            Manage your profile, channel stats, appearance, and password.
           </p>
         </div>
 
+        <AppearanceSection />
         <ProfileSection user={user} onSaved={setUserData} />
         <PasswordSection />
       </main>
     </div>
+  );
+}
+
+function AppearanceSection() {
+  const { theme, setTheme } = useTheme();
+
+  const options = [
+    { key: "light", label: "Light", icon: "light_mode" },
+    { key: "dark", label: "Dark", icon: "dark_mode" },
+  ];
+
+  return (
+    <section className="glass-panel p-8 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
+      <h3 className="font-headline-md text-headline-md text-on-background mb-6 border-b border-outline-variant/50 pb-4">
+        Appearance
+      </h3>
+      <p className="font-body-md text-body-md text-on-surface-variant mb-4">
+        Choose how ViewCast looks on this device.
+      </p>
+      <div className="flex gap-4">
+        {options.map((option) => {
+          const isActive = theme === option.key;
+          return (
+            <button
+              key={option.key}
+              type="button"
+              onClick={() => setTheme(option.key)}
+              className={
+                isActive
+                  ? "flex items-center gap-2 px-6 py-3 rounded-xl font-label-md text-label-md bg-gradient-to-r from-primary to-secondary text-on-primary shadow-lg shadow-primary/20"
+                  : "flex items-center gap-2 px-6 py-3 rounded-xl font-label-md text-label-md bg-surface-container text-on-surface hover:bg-surface-container-highest transition-colors"
+              }
+            >
+              <span className="material-symbols-outlined text-[20px]">{option.icon}</span>
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 

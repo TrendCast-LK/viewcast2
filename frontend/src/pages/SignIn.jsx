@@ -58,7 +58,7 @@ export default function SignIn() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-secondary-fixed opacity-30 blur-[100px]" />
       </div>
 
-      <div className="absolute top-6 right-6 z-20">
+      <div className="fixed top-6 right-6 z-20">
         <ThemeToggle />
       </div>
 

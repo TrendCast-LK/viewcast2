@@ -53,6 +53,9 @@ export default function SignUp() {
 
   return (
     <div className="bg-background text-on-surface antialiased min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+      <div className="fixed top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
       <div className="flex w-full min-h-screen">
         {/* Left value-prop panel */}
         <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 gradient-bg relative overflow-hidden">
