@@ -41,6 +41,17 @@ class DashboardSummary(BaseModel):
     prediction_count: int
 
 
+class ProfileUpdate(BaseModel):
+    full_name: str | None = Field(default=None, min_length=1, max_length=255)
+    subscribers: int | None = Field(default=None, ge=0)
+    monthly_views: int | None = Field(default=None, ge=0)
+
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str = Field(min_length=8, max_length=128)
+
+
 # ---- Predictions --------------------------------------------------------
 
 
