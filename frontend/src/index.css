@@ -71,8 +71,7 @@
   --color-inverse-on-surface: 239 241 243;
 }
 
-:root[data-theme="dark"],
-:root:not([data-theme="light"]).dark {
+:root.dark {
   --color-primary: 192 193 255;
   --color-on-primary: 7 0 108;
   --color-primary-container: 47 46 190;
@@ -127,65 +126,6 @@
 
   --color-inverse-surface: 229 227 234;
   --color-inverse-on-surface: 28 28 34;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]):not(.dark):not([data-theme="dark"]) {
-    --color-primary: 192 193 255;
-    --color-on-primary: 7 0 108;
-    --color-primary-container: 47 46 190;
-    --color-on-primary-container: 225 224 255;
-    --color-primary-fixed: 225 224 255;
-    --color-primary-fixed-dim: 192 193 255;
-    --color-on-primary-fixed: 7 0 108;
-    --color-on-primary-fixed-variant: 47 46 190;
-    --color-inverse-primary: 70 72 212;
-
-    --color-secondary: 255 176 205;
-    --color-on-secondary: 96 0 55;
-    --color-secondary-container: 140 0 83;
-    --color-on-secondary-container: 255 217 228;
-    --color-secondary-fixed: 255 217 228;
-    --color-secondary-fixed-dim: 255 176 205;
-    --color-on-secondary-fixed: 62 0 34;
-    --color-on-secondary-fixed-variant: 140 0 83;
-
-    --color-tertiary: 190 198 224;
-    --color-on-tertiary: 19 27 46;
-    --color-tertiary-container: 63 70 92;
-    --color-on-tertiary-container: 218 226 253;
-    --color-tertiary-fixed: 218 226 253;
-    --color-tertiary-fixed-dim: 190 198 224;
-    --color-on-tertiary-fixed: 19 27 46;
-    --color-on-tertiary-fixed-variant: 63 70 92;
-
-    --color-error: 255 180 171;
-    --color-on-error: 105 0 5;
-    --color-error-container: 147 0 10;
-    --color-on-error-container: 255 218 214;
-
-    --color-background: 16 16 20;
-    --color-on-background: 229 227 234;
-    --color-surface: 16 16 20;
-    --color-on-surface: 229 227 234;
-    --color-surface-dim: 16 16 20;
-    --color-surface-bright: 55 54 61;
-    --color-surface-variant: 71 69 78;
-    --color-on-surface-variant: 201 197 209;
-    --color-surface-tint: 192 193 255;
-
-    --color-surface-container-lowest: 11 11 14;
-    --color-surface-container-low: 24 24 29;
-    --color-surface-container: 28 28 34;
-    --color-surface-container-high: 39 38 45;
-    --color-surface-container-highest: 50 49 56;
-
-    --color-outline: 146 143 155;
-    --color-outline-variant: 71 69 78;
-
-    --color-inverse-surface: 229 227 234;
-    --color-inverse-on-surface: 28 28 34;
-  }
 }
 
 @layer base {
