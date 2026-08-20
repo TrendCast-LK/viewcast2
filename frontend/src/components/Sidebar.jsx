@@ -4,8 +4,8 @@ import { useAuth } from "../context/AuthContext";
 const navItems = [
   { key: "dashboard", label: "Dashboard", icon: "dashboard", to: "/dashboard" },
   { key: "predictions", label: "Predictions", icon: "query_stats", to: "/new-prediction" },
-  { key: "trends", label: "Trends", icon: "trending_up", to: "#" },
-  { key: "settings", label: "Settings", icon: "settings", to: "#" },
+  { key: "trends", label: "Trends", icon: "trending_up", to: "/trends" },
+  { key: "settings", label: "Settings", icon: "settings", to: "/settings" },
 ];
 
 export default function Sidebar({ active = "dashboard" }) {
