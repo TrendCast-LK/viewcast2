@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ApiError } from "../lib/api";
+import ThemeToggle from "../components/ThemeToggle";
 
 function GoogleIcon() {
   return (
