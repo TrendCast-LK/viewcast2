@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 
 export default function ResultsTopbar() {
   return (
-    <header className="fixed top-0 right-0 w-full z-40 bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl shadow-sm hidden md:flex">
+    <header className="fixed top-0 right-0 w-full z-40 bg-surface/70 backdrop-blur-xl shadow-sm hidden md:flex">
       <div className="flex justify-between items-center h-16 px-margin-desktop ml-64 w-full">
         <div className="flex items-center gap-4 w-1/3">
           <div className="relative w-full max-w-md">
@@ -10,7 +11,7 @@ export default function ResultsTopbar() {
               search
             </span>
             <input
-              className="w-full bg-surface-container dark:bg-inverse-surface border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+              className="w-full bg-surface-container border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
               placeholder="Search predictions..."
               type="text"
             />
@@ -19,13 +20,13 @@ export default function ResultsTopbar() {
         <div className="flex items-center gap-8 justify-center w-1/3">
           <nav className="flex gap-6">
             <Link
-              className="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 transition-colors active:scale-95 transition-transform px-3 py-2 rounded-lg"
+              className="text-on-surface-variant hover:bg-surface-container-high/50 transition-colors active:scale-95 transition-transform px-3 py-2 rounded-lg"
               to="/dashboard"
             >
               Home
             </Link>
             <Link
-              className="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary active:scale-95 transition-transform px-3 py-2"
+              className="text-primary font-bold border-b-2 border-primary active:scale-95 transition-transform px-3 py-2"
               to="/new-prediction"
             >
               Predictions
@@ -33,10 +34,11 @@ export default function ResultsTopbar() {
           </nav>
         </div>
         <div className="flex items-center gap-4 justify-end w-1/3">
-          <button className="p-2 rounded-full hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 text-on-surface-variant transition-colors active:scale-95">
+          <ThemeToggle />
+          <button className="p-2 rounded-full hover:bg-surface-container-high/50 text-on-surface-variant transition-colors active:scale-95">
             <span className="material-symbols-outlined">notifications</span>
           </button>
-          <button className="p-2 rounded-full hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/50 text-on-surface-variant transition-colors active:scale-95">
+          <button className="p-2 rounded-full hover:bg-surface-container-high/50 text-on-surface-variant transition-colors active:scale-95">
             <span className="material-symbols-outlined">help</span>
           </button>
           <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer">
