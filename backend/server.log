@@ -1,0 +1,15 @@
+INFO:     Started server process [31568]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53365 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "OPTIONS /auth/signup HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "POST /auth/signup HTTP/1.1" 201 Created
+INFO:     127.0.0.1:49674 - "OPTIONS /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62860 - "OPTIONS /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "OPTIONS /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62860 - "OPTIONS /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62860 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62860 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62860 - "GET /dashboard/summary HTTP/1.1" 200 OK
