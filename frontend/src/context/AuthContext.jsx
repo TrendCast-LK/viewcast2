@@ -42,6 +42,11 @@ export function AuthProvider({ children }) {
     persist(null, null);
   }
 
+  function setUserData(nextUser) {
+    localStorage.setItem(USER_KEY, JSON.stringify(nextUser));
+    setUser(nextUser);
+  }
+
   // Keep the stored user fresh (subscriber counts etc.) once per load.
   useEffect(() => {
     if (!token) return;
@@ -65,6 +70,7 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    setUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
