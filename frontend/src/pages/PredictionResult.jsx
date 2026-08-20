@@ -204,7 +204,7 @@ export default function PredictionResult() {
                   </span>
                 ))}
               </div>
-              <h3 className="font-headline-md text-headline-md text-on-surface dark:text-on-primary-container leading-tight">
+              <h3 className="font-headline-md text-headline-md text-on-surface leading-tight">
                 {prediction.title}
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant mt-2">
@@ -231,7 +231,7 @@ export default function PredictionResult() {
 
         <section className="glass-panel rounded-2xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
           <div className="flex justify-between items-center mb-6">
-            <h4 className="font-headline-md text-headline-md text-on-surface dark:text-on-primary-container">
+            <h4 className="font-headline-md text-headline-md text-on-surface">
               Predicted Trajectory
             </h4>
             <div className="flex gap-2 bg-surface-container rounded-lg p-1">
