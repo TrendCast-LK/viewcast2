@@ -47,11 +47,14 @@ scaffold, swap in Alembic once the schema needs to evolve carefully).
 | POST | `/auth/signup` | – | Create an account, returns a token + user |
 | POST | `/auth/login` | – | OAuth2 form login (`username` = email), returns a token + user |
 | GET | `/auth/me` | ✓ | Current user's profile |
+| PATCH | `/auth/me` | ✓ | Update `full_name` / `subscribers` / `monthly_views` |
+| POST | `/auth/change-password` | ✓ | Change password (`current_password`, `new_password`) |
 | GET | `/dashboard/summary` | ✓ | Name, subscriber/view stats, prediction count |
 | POST | `/predictions` | ✓ | Create a prediction (multipart form — see below) |
 | GET | `/predictions` | ✓ | List the current user's predictions |
 | GET | `/predictions/{id}` | ✓ | Full prediction detail incl. forecast trajectory |
 | DELETE | `/predictions/{id}` | ✓ | Delete a prediction |
+| GET | `/trends/summary` | ✓ | Aggregates across the user's predictions — totals, average views/confidence, best category, per-category breakdown, and a timeline for charting |
 | GET | `/health` | – | Liveness check |
 
 `POST /predictions` is a multipart form matching the "New Prediction" screen:
