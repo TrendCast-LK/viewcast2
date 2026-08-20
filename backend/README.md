@@ -85,8 +85,8 @@ app/
 
 ## Connecting the frontend
 
-The frontend (`../frontend`) is currently client-side only — its Sign In /
-Sign Up / New Prediction flows just navigate between screens without calling
-an API. Wiring it up to this backend (replace `navigate(...)` calls with
-`fetch`/`axios` calls to the endpoints above, store the JWT, etc.) hasn't
-been done yet.
+The frontend (`../frontend`) is wired up to this API — see
+`frontend/src/lib/api.js` and `frontend/src/context/AuthContext.jsx`. Run
+both (backend first) and the Sign In/Sign Up/Dashboard/New
+Prediction/Prediction Result screens all use real data end to end. CORS is
+already configured for `http://localhost:5173` via `CORS_ORIGINS` in `.env`.

@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const navItems = [
   { key: "dashboard", label: "Dashboard", icon: "dashboard", to: "/dashboard" },
@@ -8,6 +9,14 @@ const navItems = [
 ];
 
 export default function Sidebar({ active = "dashboard" }) {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    navigate("/", { replace: true });
+  }
+
   return (
     <aside className="fixed left-0 top-0 h-full w-64 z-50 bg-surface-container-lowest/70 dark:bg-surface-container-low/70 backdrop-blur-2xl shadow-[10px_0_30px_rgba(0,0,0,0.04)] flex flex-col gap-unit p-6">
       <Link to="/dashboard" className="flex items-center gap-3 mb-10 mt-2 hover:opacity-80 transition-opacity">
@@ -44,13 +53,14 @@ export default function Sidebar({ active = "dashboard" }) {
         })}
       </nav>
 
-      <Link
-        to="/"
-        className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-error-container/40 hover:text-error transition-all rounded-xl active:scale-98 duration-200 border-t border-outline-variant/50 mt-2 pt-4"
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-error-container/40 hover:text-error transition-all rounded-xl active:scale-98 duration-200 border-t border-outline-variant/50 mt-2 pt-4 text-left"
       >
         <span className="material-symbols-outlined">logout</span>
         <span className="font-label-md text-label-md">Log out</span>
-      </Link>
+      </button>
 
       <Link
         to="/new-prediction"

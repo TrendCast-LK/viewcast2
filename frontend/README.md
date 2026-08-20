@@ -6,45 +6,65 @@ pulled from your Stitch AI project (`YouTube View Predictor`, design system
 is branded as ViewCast; "Insight Glow" lives on as the underlying design
 system name.
 
+Talks to the FastAPI backend in `../backend` for real auth, dashboard stats,
+and predictions (see **Backend integration** below).
+
 ## Stack
 
 - React 19 + Vite
-- React Router (client-side routing between screens)
+- React Router (client-side routing + route guards)
 - Tailwind CSS v3, configured with the exact color/typography/spacing tokens
   from the Stitch design system
 - Chart.js for the prediction trajectory chart
+- Plain `fetch` for API calls (`src/lib/api.js`) — no extra HTTP library
 
 ## Screens
 
-| Route | Screen |
-| --- | --- |
-| `/` | Sign In |
-| `/sign-up` | Sign Up |
-| `/dashboard` | Dashboard (welcome overview) |
-| `/new-prediction` | Create New Prediction (form) |
-| `/prediction-result` | Prediction Results (with forecast chart) |
+| Route | Screen | Auth required |
+| --- | --- | --- |
+| `/` | Sign In | – |
+| `/sign-up` | Sign Up | – |
+| `/dashboard` | Dashboard — real name/subscriber/view stats + recent predictions | ✓ |
+| `/new-prediction` | Create New Prediction (form, incl. file upload) | ✓ |
+| `/prediction-result/:id` | Prediction Results (real forecast + chart) | ✓ |
 
-Navigation between screens is wired up (sign in/up, sidebar links, "New
-Prediction" CTAs, "Initialize Prediction" → results, "Submit Another" → new
-prediction form, "Log out" → sign in, ViewCast logo → dashboard).
+Protected routes redirect to Sign In if there's no session (`RequireAuth` /
+`AuthContext`), and back to the page you wanted after logging in.
 
 ## Getting started
+
+Needs the backend running first (see `../backend/README.md`).
 
 ```bash
 cd frontend
 npm install
-npm run dev      # start the dev server at http://localhost:5173
-npm run build    # production build to dist/
+cp .env.example .env   # points at http://localhost:8000 by default
+npm run dev             # http://localhost:5173
+npm run build            # production build to dist/
 ```
+
+## Backend integration
+
+- `src/lib/api.js` — thin `fetch` wrapper (`signup`, `login`, `me`,
+  `getDashboardSummary`, `createPrediction`, `listPredictions`,
+  `getPrediction`, `deletePrediction`), attaches the bearer token, throws
+  `ApiError` with a readable message on failure.
+- `src/context/AuthContext.jsx` — holds the current user + JWT (persisted to
+  `localStorage`), exposes `login`/`signup`/`logout`.
+- `src/components/RequireAuth.jsx` — route guard for the pages above.
+- New Prediction's file dropzone sends one file, routed server-side to the
+  thumbnail or dataset field by MIME type; the two submit buttons hit the
+  same endpoint with `save_as_draft` true/false.
+- `VITE_API_URL` (in `.env`) points at the backend — change it if the API
+  isn't on `localhost:8000`.
 
 ## Notes
 
 - The Dashboard, New Prediction, and Prediction Result screens share a
   `Sidebar` component (`src/components/Sidebar.jsx`) that highlights the
-  active section and includes the log-out link.
+  active section and handles log-out.
 - Design tokens (colors, spacing, type scale) live in `tailwind.config.js`
   and `src/index.css`, copied over from the Stitch export so future screens
   stay visually consistent.
-- All forms are currently front-end only (no backend wired up yet) — submit
-  actions navigate between screens to demonstrate the flow. See `../backend`
-  for the API this will eventually talk to.
+- The forecast shown on Prediction Results comes from the backend's mock
+  forecast engine, not a real ML model yet — see `../backend/README.md`.

@@ -1,4 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { ApiError } from "../lib/api";
 
 function GoogleIcon() {
   return (
@@ -25,10 +28,26 @@ function GoogleIcon() {
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/dashboard");
+    setError(null);
+    setSubmitting(true);
+    try {
+      await login(email, password);
+      const redirectTo = location.state?.from?.pathname || "/dashboard";
+      navigate(redirectTo, { replace: true });
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -67,6 +86,11 @@ export default function SignIn() {
             </div>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
+              {error && (
+                <div className="rounded-lg bg-error-container/60 text-on-error-container px-4 py-3 font-body-md text-body-md text-sm">
+                  {error}
+                </div>
+              )}
               <div>
                 <label className="block font-label-md text-label-md text-on-surface mb-1" htmlFor="email">
                   Email
@@ -78,6 +102,8 @@ export default function SignIn() {
                   placeholder="name@company.com"
                   required
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
@@ -96,13 +122,16 @@ export default function SignIn() {
                   placeholder="••••••••"
                   required
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <button
-                className="w-full gradient-primary gradient-primary-glow text-on-primary font-label-md text-label-md rounded-lg py-3 px-4 hover:opacity-90 transition-opacity duration-200 mt-2"
+                className="w-full gradient-primary gradient-primary-glow text-on-primary font-label-md text-label-md rounded-lg py-3 px-4 hover:opacity-90 transition-opacity duration-200 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 type="submit"
+                disabled={submitting}
               >
-                Sign In
+                {submitting ? "Signing in…" : "Sign In"}
               </button>
             </form>
 

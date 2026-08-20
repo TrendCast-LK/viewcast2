@@ -1,15 +1,55 @@
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Chart from "chart.js/auto";
 import Sidebar from "../components/Sidebar";
 import ResultsTopbar from "../components/ResultsTopbar";
+import * as api from "../lib/api";
+import { formatCompact, formatSignedPercent } from "../lib/format";
+
+const PLACEHOLDER_THUMBNAIL =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDiLpShN4XgeCCGMTWX7S5lrv3G0lqBcxQjRjdTOCL1gCVpB__fhYEG_7YGolU-oSbAbmpChoPuCl7oI_lDLekL3xXjQbxhBTlTByJFaHrdgqzMLZR9_pyh4ryDGvgZMb_dMdCgja8lDxjZpI_q_pr0G8N_sRNDGLxyD3eCdlVaQzs3LS0HTO_y5XjmP_JVtwt_zGQWlQ_9KIskQ87a9p6xAiuaRsU2WpK21ZPvjQGnvYdNr407QAA";
 
 export default function PredictionResult() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
 
+  const [prediction, setPrediction] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    api
+      .getPrediction(id)
+      .then((data) => {
+        if (!cancelled) setPrediction(data);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message || "Couldn't load this prediction.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (!prediction || !canvasRef.current) return;
+
+    const trajectory = prediction.trajectory?.length
+      ? prediction.trajectory
+      : [];
+    const labels = trajectory.map((p) => p.day);
+    const data = trajectory.map((p) => p.views);
+
     const ctx = canvasRef.current.getContext("2d");
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -19,11 +59,11 @@ export default function PredictionResult() {
     chartRef.current = new Chart(ctx, {
       type: "line",
       data: {
-        labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+        labels,
         datasets: [
           {
             label: "Predicted Views",
-            data: [150000, 420000, 680000, 890000, 1050000, 1150000, 1200000],
+            data,
             borderColor: "#4648d4",
             backgroundColor: gradient,
             borderWidth: 3,
@@ -84,7 +124,31 @@ export default function PredictionResult() {
     });
 
     return () => chartRef.current?.destroy();
-  }, []);
+  }, [prediction]);
+
+  if (loading) {
+    return (
+      <div className="bg-surface min-h-screen flex items-center justify-center">
+        <span className="material-symbols-outlined animate-spin text-4xl text-primary">progress_activity</span>
+      </div>
+    );
+  }
+
+  if (error || !prediction) {
+    return (
+      <div className="bg-surface min-h-screen flex flex-col items-center justify-center gap-4 text-center px-6">
+        <span className="material-symbols-outlined text-4xl text-error">error</span>
+        <p className="font-body-md text-body-md text-on-surface-variant">
+          {error || "Prediction not found."}
+        </p>
+        <Link to="/dashboard" className="bg-primary text-white px-5 py-2.5 rounded-full font-label-md text-label-md">
+          Back to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
+  const changeIcon = (prediction.change_vs_avg ?? 0) >= 0 ? "trending_up" : "trending_down";
 
   return (
     <div className="bg-surface dark:bg-inverse-surface text-on-surface dark:text-inverse-on-surface font-body-md text-body-md antialiased min-h-screen">
@@ -119,40 +183,47 @@ export default function PredictionResult() {
             <img
               alt="Video thumbnail"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiLpShN4XgeCCGMTWX7S5lrv3G0lqBcxQjRjdTOCL1gCVpB__fhYEG_7YGolU-oSbAbmpChoPuCl7oI_lDLekL3xXjQbxhBTlTByJFaHrdgqzMLZR9_pyh4ryDGvgZMb_dMdCgja8lDxjZpI_q_pr0G8N_sRNDGLxyD3eCdlVaQzs3LS0HTO_y5XjmP_JVtwt_zGQWlQ_9KIskQ87a9p6xAiuaRsU2WpK21ZPvjQGnvYdNr407QAA"
+              src={api.fileUrl(prediction.thumbnail_url) || PLACEHOLDER_THUMBNAIL}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-              <div className="bg-black/50 backdrop-blur-md px-3 py-1 rounded-md text-white font-label-sm text-label-sm border border-white/20">
-                12:45
-              </div>
-            </div>
           </div>
 
           <div className="w-full lg:w-7/12 flex flex-col gap-6">
             <div>
-              <div className="flex gap-2 mb-3">
-                <span className="px-3 py-1 bg-primary-container/20 text-primary-fixed-dim rounded-full font-label-sm text-label-sm border border-primary-container/30">
-                  Tech Review
-                </span>
-                <span className="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full font-label-sm text-label-sm">
-                  Gadgets
-                </span>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {prediction.category && (
+                  <span className="px-3 py-1 bg-primary-container/20 text-primary-fixed-dim rounded-full font-label-sm text-label-sm border border-primary-container/30">
+                    {prediction.category}
+                  </span>
+                )}
+                {prediction.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full font-label-sm text-label-sm"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface dark:text-on-primary-container leading-tight">
-                The Future of Mobile: Quantum Chip Deep Dive
+                {prediction.title}
               </h3>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2">
-                In this comprehensive review, we benchmark the latest quantum architecture against
-                current industry leaders to see if the hype is justified...
+              <p className="font-body-md text-body-md text-on-surface-variant mt-2">
+                Predicted with {Math.round((prediction.confidence ?? 0) * 100)}% confidence
+                {prediction.target_date ? ` · targeting ${prediction.target_date}` : ""}
               </p>
             </div>
             <div className="border-t border-outline-variant/30 pt-6 mt-auto">
               <p className="font-label-md text-label-md text-on-surface-variant mb-1">7-Day View Forecast</p>
               <div className="flex items-baseline gap-3">
-                <span className="font-display-lg text-display-lg gradient-text">1.2M</span>
-                <span className="flex items-center text-secondary font-label-md text-label-md bg-secondary-container/20 px-2 py-1 rounded-md">
-                  <span className="material-symbols-outlined text-sm mr-1">trending_up</span> +24% vs avg
+                <span className="font-display-lg text-display-lg gradient-text">
+                  {formatCompact(prediction.predicted_views)}
                 </span>
+                {prediction.change_vs_avg !== null && (
+                  <span className="flex items-center text-secondary font-label-md text-label-md bg-secondary-container/20 px-2 py-1 rounded-md">
+                    <span className="material-symbols-outlined text-sm mr-1">{changeIcon}</span>
+                    {formatSignedPercent(prediction.change_vs_avg)} vs avg
+                  </span>
+                )}
               </div>
             </div>
           </div>

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { ApiError } from "../lib/api";
 
 function GoogleIcon() {
   return (
@@ -26,11 +28,26 @@ function GoogleIcon() {
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { signup } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/dashboard");
+    setError(null);
+    setSubmitting(true);
+    try {
+      await signup(fullName, email, password);
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -124,6 +141,11 @@ export default function SignUp() {
               </div>
 
               <form className="space-y-5" onSubmit={handleSubmit}>
+                {error && (
+                  <div className="rounded-lg bg-error-container/60 text-on-error-container px-4 py-3 font-body-md text-body-md text-sm">
+                    {error}
+                  </div>
+                )}
                 <div className="space-y-1.5">
                   <label className="font-label-md text-label-md text-on-surface block" htmlFor="fullName">
                     Full Name
@@ -138,6 +160,8 @@ export default function SignUp() {
                       placeholder="Jane Doe"
                       required
                       type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
                 </div>
@@ -156,6 +180,8 @@ export default function SignUp() {
                       placeholder="jane@example.com"
                       required
                       type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                 </div>
@@ -173,7 +199,10 @@ export default function SignUp() {
                       id="password"
                       placeholder="••••••••"
                       required
+                      minLength={8}
                       type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <button
                       className="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-primary transition-colors"
@@ -192,10 +221,11 @@ export default function SignUp() {
                 </div>
 
                 <button
-                  className="w-full btn-gradient text-on-primary font-label-md text-label-md py-3 rounded-lg flex justify-center items-center gap-2 mt-6"
+                  className="w-full btn-gradient text-on-primary font-label-md text-label-md py-3 rounded-lg flex justify-center items-center gap-2 mt-6 disabled:opacity-60 disabled:cursor-not-allowed"
                   type="submit"
+                  disabled={submitting}
                 >
-                  Create Account
+                  {submitting ? "Creating account…" : "Create Account"}
                   <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
               </form>
