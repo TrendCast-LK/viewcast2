@@ -60,6 +60,25 @@ npm run build            # production build to dist/
 - `VITE_API_URL` (in `.env`) points at the backend — change it if the API
   isn't on `localhost:8000`.
 
+## Dark mode
+
+Toggleable from the sun/moon icon in the top bar (every authenticated page)
+or the sign-in/sign-up corner, and explicitly from Settings → Appearance.
+Defaults to the OS's `prefers-color-scheme` on first visit, then remembers
+the explicit choice in `localStorage` (`viewcast_theme`) — applied before
+React even mounts (see the inline script in `index.html`) so there's no
+flash of the wrong theme on load.
+
+Implementation: every design-system color is a `--color-x: R G B` CSS custom
+property (`src/index.css`), with a light table on `:root` and a dark table
+under `.dark`; `tailwind.config.js` points each Tailwind color at
+`rgb(var(--color-x) / <alpha-value>)` so existing classes (`bg-surface`,
+`text-on-background`, `bg-primary/20`, …) work in both themes without
+per-component `dark:` variants. `src/context/ThemeContext.jsx` toggles the
+`dark` class on `<html>`. Chart.js canvases can't follow CSS variables, so
+`src/lib/chartTheme.js` provides matching light/dark color sets and the
+chart-owning pages re-create their chart when the theme changes.
+
 ## Notes
 
 - The Dashboard, New Prediction, and Prediction Result screens share a
