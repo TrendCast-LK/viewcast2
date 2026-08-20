@@ -88,3 +88,30 @@ class PredictionSummary(BaseModel):
     predicted_views: int | None
     thumbnail_url: str | None
     created_at: datetime
+
+
+# ---- Trends ---------------------------------------------------------------
+
+
+class CategoryBreakdown(BaseModel):
+    category: str
+    count: int
+    average_views: int
+
+
+class TimelinePoint(BaseModel):
+    id: int
+    title: str
+    created_at: datetime
+    predicted_views: int
+
+
+class TrendsSummary(BaseModel):
+    total_predictions: int
+    completed_predictions: int
+    draft_predictions: int
+    average_predicted_views: int | None
+    average_confidence: float | None
+    best_category: str | None
+    category_breakdown: list[CategoryBreakdown]
+    timeline: list[TimelinePoint]

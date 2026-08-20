@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import Base, engine
-from app.routers import auth, dashboard, predictions
+from app.routers import auth, dashboard, predictions, trends
 
 
 @asynccontextmanager
@@ -35,6 +35,7 @@ app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads"
 app.include_router(auth.router)
 app.include_router(dashboard.router)
 app.include_router(predictions.router)
+app.include_router(trends.router)
 
 
 @app.get("/health", tags=["health"])
