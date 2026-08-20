@@ -2,9 +2,196 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Design-system color tokens as CSS custom properties (space-separated RGB,
+ * so Tailwind's `rgb(var(--x) / <alpha-value>)` pattern in tailwind.config.js
+ * can still apply opacity modifiers like `bg-primary/20`).
+ *
+ * The light values are the original "Insight Glow" palette from the Stitch
+ * export. The dark values reuse that same palette's own "fixed"/"inverse"
+ * roles (Material Design 3's convention is that these are precomputed for
+ * exactly this remapping) plus a hand-built neutral surface scale, so dark
+ * mode stays visually consistent with the brand rather than being a generic
+ * invert.
+ */
+:root {
+  --color-primary: 70 72 212;
+  --color-on-primary: 255 255 255;
+  --color-primary-container: 96 99 238;
+  --color-on-primary-container: 255 251 255;
+  --color-primary-fixed: 225 224 255;
+  --color-primary-fixed-dim: 192 193 255;
+  --color-on-primary-fixed: 7 0 108;
+  --color-on-primary-fixed-variant: 47 46 190;
+  --color-inverse-primary: 192 193 255;
+
+  --color-secondary: 180 19 109;
+  --color-on-secondary: 255 255 255;
+  --color-secondary-container: 253 86 167;
+  --color-on-secondary-container: 96 0 55;
+  --color-secondary-fixed: 255 217 228;
+  --color-secondary-fixed-dim: 255 176 205;
+  --color-on-secondary-fixed: 62 0 34;
+  --color-on-secondary-fixed-variant: 140 0 83;
+
+  --color-tertiary: 84 92 114;
+  --color-on-tertiary: 255 255 255;
+  --color-tertiary-container: 108 116 139;
+  --color-on-tertiary-container: 254 252 255;
+  --color-tertiary-fixed: 218 226 253;
+  --color-tertiary-fixed-dim: 190 198 224;
+  --color-on-tertiary-fixed: 19 27 46;
+  --color-on-tertiary-fixed-variant: 63 70 92;
+
+  --color-error: 186 26 26;
+  --color-on-error: 255 255 255;
+  --color-error-container: 255 218 214;
+  --color-on-error-container: 147 0 10;
+
+  --color-background: 247 249 251;
+  --color-on-background: 25 28 30;
+  --color-surface: 247 249 251;
+  --color-on-surface: 25 28 30;
+  --color-surface-dim: 216 218 220;
+  --color-surface-bright: 247 249 251;
+  --color-surface-variant: 224 227 229;
+  --color-on-surface-variant: 70 69 84;
+  --color-surface-tint: 73 75 214;
+
+  --color-surface-container-lowest: 255 255 255;
+  --color-surface-container-low: 242 244 246;
+  --color-surface-container: 236 238 240;
+  --color-surface-container-high: 230 232 234;
+  --color-surface-container-highest: 224 227 229;
+
+  --color-outline: 118 117 134;
+  --color-outline-variant: 199 196 215;
+
+  --color-inverse-surface: 45 49 51;
+  --color-inverse-on-surface: 239 241 243;
+}
+
+:root[data-theme="dark"],
+:root:not([data-theme="light"]).dark {
+  --color-primary: 192 193 255;
+  --color-on-primary: 7 0 108;
+  --color-primary-container: 47 46 190;
+  --color-on-primary-container: 225 224 255;
+  --color-primary-fixed: 225 224 255;
+  --color-primary-fixed-dim: 192 193 255;
+  --color-on-primary-fixed: 7 0 108;
+  --color-on-primary-fixed-variant: 47 46 190;
+  --color-inverse-primary: 70 72 212;
+
+  --color-secondary: 255 176 205;
+  --color-on-secondary: 96 0 55;
+  --color-secondary-container: 140 0 83;
+  --color-on-secondary-container: 255 217 228;
+  --color-secondary-fixed: 255 217 228;
+  --color-secondary-fixed-dim: 255 176 205;
+  --color-on-secondary-fixed: 62 0 34;
+  --color-on-secondary-fixed-variant: 140 0 83;
+
+  --color-tertiary: 190 198 224;
+  --color-on-tertiary: 19 27 46;
+  --color-tertiary-container: 63 70 92;
+  --color-on-tertiary-container: 218 226 253;
+  --color-tertiary-fixed: 218 226 253;
+  --color-tertiary-fixed-dim: 190 198 224;
+  --color-on-tertiary-fixed: 19 27 46;
+  --color-on-tertiary-fixed-variant: 63 70 92;
+
+  --color-error: 255 180 171;
+  --color-on-error: 105 0 5;
+  --color-error-container: 147 0 10;
+  --color-on-error-container: 255 218 214;
+
+  --color-background: 16 16 20;
+  --color-on-background: 229 227 234;
+  --color-surface: 16 16 20;
+  --color-on-surface: 229 227 234;
+  --color-surface-dim: 16 16 20;
+  --color-surface-bright: 55 54 61;
+  --color-surface-variant: 71 69 78;
+  --color-on-surface-variant: 201 197 209;
+  --color-surface-tint: 192 193 255;
+
+  --color-surface-container-lowest: 11 11 14;
+  --color-surface-container-low: 24 24 29;
+  --color-surface-container: 28 28 34;
+  --color-surface-container-high: 39 38 45;
+  --color-surface-container-highest: 50 49 56;
+
+  --color-outline: 146 143 155;
+  --color-outline-variant: 71 69 78;
+
+  --color-inverse-surface: 229 227 234;
+  --color-inverse-on-surface: 28 28 34;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.dark):not([data-theme="dark"]) {
+    --color-primary: 192 193 255;
+    --color-on-primary: 7 0 108;
+    --color-primary-container: 47 46 190;
+    --color-on-primary-container: 225 224 255;
+    --color-primary-fixed: 225 224 255;
+    --color-primary-fixed-dim: 192 193 255;
+    --color-on-primary-fixed: 7 0 108;
+    --color-on-primary-fixed-variant: 47 46 190;
+    --color-inverse-primary: 70 72 212;
+
+    --color-secondary: 255 176 205;
+    --color-on-secondary: 96 0 55;
+    --color-secondary-container: 140 0 83;
+    --color-on-secondary-container: 255 217 228;
+    --color-secondary-fixed: 255 217 228;
+    --color-secondary-fixed-dim: 255 176 205;
+    --color-on-secondary-fixed: 62 0 34;
+    --color-on-secondary-fixed-variant: 140 0 83;
+
+    --color-tertiary: 190 198 224;
+    --color-on-tertiary: 19 27 46;
+    --color-tertiary-container: 63 70 92;
+    --color-on-tertiary-container: 218 226 253;
+    --color-tertiary-fixed: 218 226 253;
+    --color-tertiary-fixed-dim: 190 198 224;
+    --color-on-tertiary-fixed: 19 27 46;
+    --color-on-tertiary-fixed-variant: 63 70 92;
+
+    --color-error: 255 180 171;
+    --color-on-error: 105 0 5;
+    --color-error-container: 147 0 10;
+    --color-on-error-container: 255 218 214;
+
+    --color-background: 16 16 20;
+    --color-on-background: 229 227 234;
+    --color-surface: 16 16 20;
+    --color-on-surface: 229 227 234;
+    --color-surface-dim: 16 16 20;
+    --color-surface-bright: 55 54 61;
+    --color-surface-variant: 71 69 78;
+    --color-on-surface-variant: 201 197 209;
+    --color-surface-tint: 192 193 255;
+
+    --color-surface-container-lowest: 11 11 14;
+    --color-surface-container-low: 24 24 29;
+    --color-surface-container: 28 28 34;
+    --color-surface-container-high: 39 38 45;
+    --color-surface-container-highest: 50 49 56;
+
+    --color-outline: 146 143 155;
+    --color-outline-variant: 71 69 78;
+
+    --color-inverse-surface: 229 227 234;
+    --color-inverse-on-surface: 28 28 34;
+  }
+}
+
 @layer base {
   body {
     @apply bg-background text-on-background;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
@@ -35,8 +222,8 @@
   border: 1px solid rgba(241, 245, 249, 0.5);
 }
 .dark .glass-panel {
-  background: rgba(216, 218, 220, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(28, 28, 34, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-card {
@@ -45,6 +232,11 @@
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 0 0 1px #f1f5f9;
+}
+.dark .glass-card {
+  background: rgba(28, 28, 34, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .glow-shadow {
@@ -88,6 +280,12 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.dark .gradient-text {
+  background: linear-gradient(135deg, #9698ff 0%, #ff7ec2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .gradient-primary {
   background: linear-gradient(135deg, #4648d4 0%, #fd56a7 100%);
@@ -101,6 +299,11 @@
     radial-gradient(circle at 0% 100%, #b4136d 0%, transparent 40%);
   background-color: #f7f9fb;
 }
+.dark .gradient-bg {
+  background: radial-gradient(circle at 100% 0%, rgba(70, 72, 212, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(180, 19, 109, 0.5) 0%, transparent 40%);
+  background-color: #101014;
+}
 
 .input-focus-ring:focus {
   outline: none;
@@ -111,19 +314,28 @@
   border-color: #4648d4;
   box-shadow: 0 0 0 4px rgba(70, 72, 212, 0.1);
 }
+.dark .input-focus-ring:focus,
+.dark .input-focus-ring:focus-within {
+  border-color: rgb(var(--color-primary));
+  box-shadow: 0 0 0 4px rgba(192, 193, 255, 0.15);
+}
 
 .input-field {
   width: 100%;
-  background: theme("colors.surface-container-lowest");
-  border: 1px solid theme("colors.outline-variant");
+  background: rgb(var(--color-surface-container-lowest));
+  border: 1px solid rgb(var(--color-outline-variant));
   border-radius: theme("borderRadius.lg");
   padding: theme("spacing.unit") calc(theme("spacing.unit") * 2);
+  color: rgb(var(--color-on-surface));
   transition: all 0.2s ease;
 }
 .input-field:focus {
   outline: none;
-  border-color: theme("colors.primary");
-  box-shadow: 0 0 0 4px theme("colors.primary-fixed");
+  border-color: rgb(var(--color-primary));
+  box-shadow: 0 0 0 4px rgb(var(--color-primary-fixed) / 0.6);
+}
+.dark .input-field:focus {
+  box-shadow: 0 0 0 4px rgb(var(--color-primary) / 0.2);
 }
 
 .btn-gradient {
