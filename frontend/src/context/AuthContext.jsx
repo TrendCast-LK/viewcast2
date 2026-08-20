@@ -5,6 +5,15 @@ const USER_KEY = "viewcast_user";
 
 const AuthContext = createContext(null);
 
+// Plain module-level flag (not React state) so it can be read synchronously
+// at redirect-decision time with zero dependency on render/scheduling order.
+// See the comment on `logout()` below for why this exists.
+let loggingOut = false;
+
+export function isLoggingOut() {
+  return loggingOut;
+}
+
 function loadStoredUser() {
   try {
     const raw = localStorage.getItem(USER_KEY);
@@ -39,7 +48,19 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    // Clearing auth state here re-renders whatever protected page is still
+    // mounted (React Router's navigate() to "/" doesn't commit synchronously
+    // enough to beat this render), so RequireAuth sees isAuthenticated:false
+    // while the URL is still e.g. "/settings" and fires its own redirect
+    // with `state: { from: "/settings" }`. That stale "from" would then
+    // hijack the *next*, unrelated login and send it back there instead of
+    // /dashboard. The `loggingOut` flag tells RequireAuth to skip recording
+    // "from" for this specific, deliberate logout.
+    loggingOut = true;
     persist(null, null);
+    setTimeout(() => {
+      loggingOut = false;
+    }, 0);
   }
 
   function setUserData(nextUser) {
