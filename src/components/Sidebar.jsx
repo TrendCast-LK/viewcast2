@@ -10,7 +10,7 @@ const navItems = [
 export default function Sidebar({ active = "dashboard" }) {
   return (
     <aside className="fixed left-0 top-0 h-full w-64 z-50 bg-surface-container-lowest/70 dark:bg-surface-container-low/70 backdrop-blur-2xl shadow-[10px_0_30px_rgba(0,0,0,0.04)] flex flex-col gap-unit p-6">
-      <div className="flex items-center gap-3 mb-10 mt-2">
+      <Link to="/dashboard" className="flex items-center gap-3 mb-10 mt-2 hover:opacity-80 transition-opacity">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg">
           <span className="material-symbols-outlined fill">insights</span>
         </div>
@@ -20,7 +20,7 @@ export default function Sidebar({ active = "dashboard" }) {
           </h1>
           <p className="font-label-sm text-label-sm text-on-surface-variant">Predictive Brilliance</p>
         </div>
-      </div>
+      </Link>
 
       <nav className="flex flex-col gap-2 flex-grow">
         {navItems.map((item) => {
@@ -43,6 +43,14 @@ export default function Sidebar({ active = "dashboard" }) {
           );
         })}
       </nav>
+
+      <Link
+        to="/"
+        className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-error-container/40 hover:text-error transition-all rounded-xl active:scale-98 duration-200 border-t border-outline-variant/50 mt-2 pt-4"
+      >
+        <span className="material-symbols-outlined">logout</span>
+        <span className="font-label-md text-label-md">Log out</span>
+      </Link>
 
       <Link
         to="/new-prediction"
