@@ -153,6 +153,7 @@ function PasswordSection() {
   const [saved, setSaved] = useState(false);
 
   async function handleSubmit(e) {
+    console.log("[DEBUG] PasswordSection.handleSubmit fired", Date.now());
     e.preventDefault();
     setError(null);
     setSaved(false);
