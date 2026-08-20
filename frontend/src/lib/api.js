@@ -51,7 +51,15 @@ async function request(path, { method = "GET", json, form, auth = true } = {}) {
     if (token) headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_URL}${path}`, init);
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, init);
+  } catch {
+    // fetch() itself throws (not an HTTP error status) when the server is
+    // unreachable — down, wrong port, or blocked by CORS. Surface that
+    // distinctly instead of letting it look like a generic app error.
+    throw new ApiError(`Can't reach the server at ${API_URL}. Is the backend running?`, 0);
+  }
 
   if (!response.ok) {
     const message = await parseErrorDetail(response);
