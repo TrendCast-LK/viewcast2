@@ -80,6 +80,7 @@ app/
     auth.py           /auth/*
     dashboard.py      /dashboard/*
     predictions.py    /predictions/*
+    trends.py         /trends/*
   services/
     prediction_engine.py   Mock forecast generator — TODO: real model here
   utils/
