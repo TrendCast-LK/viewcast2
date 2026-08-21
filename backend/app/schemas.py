@@ -1,6 +1,6 @@
 from datetime import date, datetime, time
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 # ---- Auth / users -----------------------------------------------------
@@ -10,6 +10,15 @@ class UserCreate(BaseModel):
     full_name: str = Field(min_length=1, max_length=255)
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
+    channel_url: str = Field(min_length=1, max_length=500)
+
+    @field_validator("channel_url")
+    @classmethod
+    def validate_channel_url(cls, value: str) -> str:
+        value = value.strip()
+        if "youtube.com" not in value and "youtu.be" not in value:
+            raise ValueError("Enter a youtube.com channel URL (e.g. https://www.youtube.com/@yourchannel)")
+        return value
 
 
 class UserLogin(BaseModel):
@@ -25,6 +34,9 @@ class UserOut(BaseModel):
     email: EmailStr
     subscribers: int
     monthly_views: int
+    channel_url: str
+    channel_title: str | None
+    channel_thumbnail_url: str | None
     created_at: datetime
 
 
@@ -50,6 +62,23 @@ class ProfileUpdate(BaseModel):
 class PasswordChange(BaseModel):
     current_password: str
     new_password: str = Field(min_length=8, max_length=128)
+
+
+class ChannelOut(BaseModel):
+    channel_url: str
+    channel_id: str | None
+    title: str | None
+    description: str | None
+    thumbnail_url: str | None
+    banner_url: str | None
+    country: str | None
+    published_at: datetime | None
+    view_count: int | None
+    subscriber_count: int | None
+    subscriber_hidden: bool
+    video_count: int | None
+    fetch_error: str | None
+    fetched_at: datetime | None
 
 
 # ---- Predictions --------------------------------------------------------
