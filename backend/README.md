@@ -55,6 +55,8 @@ scaffold, swap in Alembic once the schema needs to evolve carefully).
 | GET | `/predictions/{id}` | ✓ | Full prediction detail incl. forecast trajectory |
 | DELETE | `/predictions/{id}` | ✓ | Delete a prediction |
 | GET | `/trends/summary` | ✓ | Aggregates across the user's predictions — totals, average views/confidence, best category, per-category breakdown, and a timeline for charting |
+| GET | `/channel/me` | ✓ | The user's fetched YouTube channel data |
+| POST | `/channel/refresh` | ✓ | Re-fetch the channel from YouTube (retry after a failure, or pull fresh stats) |
 | GET | `/health` | – | Liveness check |
 
 `POST /predictions` is a multipart form matching the "New Prediction" screen:
@@ -65,6 +67,28 @@ returned in the response (`predicted_views`, `confidence`, `change_vs_avg`,
 `trajectory`).
 
 Authenticated requests send `Authorization: Bearer <access_token>`.
+
+## YouTube channel data
+
+`POST /auth/signup` now requires `channel_url` (a `youtube.com` URL — the
+frontend's Sign Up form has a required field for it). Right after creating
+the account, the backend fetches that channel from the **YouTube Data API
+v3** (`app/services/youtube.py`) and stores title, description, thumbnail,
+banner, country, published date, view/video/subscriber counts on the user.
+It also feeds real subscriber/view numbers into the same `subscribers` /
+`monthly_views` fields the forecast engine and Dashboard use.
+
+**This needs `YOUTUBE_API_KEY` set in `.env`** — get one free at
+https://console.cloud.google.com (create a project, enable "YouTube Data API
+v3" under APIs & Services, create an API key under Credentials). Without a
+key, signup still succeeds — the fetch just fails gracefully and
+`channel_fetch_error` explains why; the user can retry from the Channel page
+in the frontend (`POST /channel/refresh`) once a key is configured.
+
+Channel URL formats handled: `/channel/UC...`, `/@handle`, `/user/name`, and
+best-effort for legacy `/c/CustomName` (tries it as a handle, then falls back
+to a search — the only reliable way to resolve those without a first-party
+custom-URL lookup endpoint).
 
 ## Project layout
 
