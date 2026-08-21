@@ -50,7 +50,8 @@ npm run build            # production build to dist/
 
 - `src/lib/api.js` — thin `fetch` wrapper (`signup`, `login`, `me`,
   `getDashboardSummary`, `createPrediction`, `listPredictions`,
-  `getPrediction`, `deletePrediction`, `getChannel`, `refreshChannel`),
+  `getPrediction`, `deletePrediction`, `getChannel`, `refreshChannel`,
+  `listNotifications`, `markNotificationRead`, `markAllNotificationsRead`),
   attaches the bearer token, throws `ApiError` with a readable message on
   failure.
 - `src/context/AuthContext.jsx` — holds the current user + JWT (persisted to
@@ -86,6 +87,19 @@ per-component `dark:` variants. `src/context/ThemeContext.jsx` toggles the
 `dark` class on `<html>`. Chart.js canvases can't follow CSS variables, so
 `src/lib/chartTheme.js` provides matching light/dark color sets and the
 chart-owning pages re-create their chart when the theme changes.
+
+## Notifications & Help
+
+The bell icon (top bar, every authenticated page) is a real notifications
+dropdown (`src/components/NotificationsMenu.jsx`) — an unread-count badge,
+fetched from `GET /notifications` on mount and refreshed each time it's
+opened; clicking a notification or "Mark all read" optimistically updates
+the UI and calls the backend. Notifications are created server-side on
+signup (welcome + channel fetch outcome), channel refresh, and completed
+predictions — see `../backend/README.md`'s Notifications section.
+
+The help (?) icon is `src/components/HelpMenu.jsx` — a static FAQ panel, no
+backend involved.
 
 ## Notes
 

@@ -116,18 +116,20 @@ app/
   main.py             FastAPI app, CORS, static /uploads mount, router wiring
   config.py           Settings (reads .env)
   database.py         SQLAlchemy engine/session
-  models.py           User, Prediction ORM models
-  schemas.py          Pydantic request/response models
+  models.py           User, Prediction, Notification ORM models
+  schemas.py          Pydantic request/response models, incl. UTCDatetime
   auth.py             Password hashing, JWT issue/verify, get_current_user
   routers/
-    auth.py           /auth/*
-    channel.py        /channel/* — also owns apply_channel_fetch(), called from signup
-    dashboard.py      /dashboard/*
-    predictions.py    /predictions/*
-    trends.py         /trends/*
+    auth.py             /auth/*
+    channel.py          /channel/* — also owns apply_channel_fetch(), called from signup
+    dashboard.py        /dashboard/*
+    notifications.py    /notifications/*
+    predictions.py       /predictions/*
+    trends.py             /trends/*
   services/
     prediction_engine.py   Mock forecast generator — TODO: real model here
     youtube.py              YouTube Data API v3 client + URL parsing
+    notifications.py        notify() helper used by the routers above
   utils/
     files.py          Upload handling (size limits, unique filenames)
 ```
