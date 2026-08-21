@@ -41,8 +41,8 @@ export function AuthProvider({ children }) {
     return result.user;
   }
 
-  async function signup(fullName, email, password) {
-    const result = await api.signup({ fullName, email, password });
+  async function signup(fullName, email, password, channelUrl) {
+    const result = await api.signup({ fullName, email, password, channelUrl });
     persist(result.access_token, result.user);
     return result.user;
   }

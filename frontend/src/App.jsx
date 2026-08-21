@@ -6,6 +6,7 @@ import NewPrediction from "./pages/NewPrediction";
 import PredictionResult from "./pages/PredictionResult";
 import Trends from "./pages/Trends";
 import Settings from "./pages/Settings";
+import Channel from "./pages/Channel";
 import RequireAuth from "./components/RequireAuth";
 
 export default function App() {
@@ -51,6 +52,15 @@ export default function App() {
         element={
           <RequireAuth>
             <Settings />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="/channel"
+        element={
+          <RequireAuth>
+            <Channel />
           </RequireAuth>
         }
       />

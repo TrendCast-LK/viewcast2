@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "../context/AuthContext";
+
+const DEFAULT_AVATAR =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCFlsyHTqpgmCQZ1G2B8qT_x9A4BrkvDQzJ0ClRoCFwxp4NyfWdxWEMrZKpcA5UDh1sBxPqjF17Wlks1gibOoB5sil8bGwLdbsQk4pCQwnwEK2o7iP9tfscZa4YNLcevfHldg_OI_cEFrQ-ilF_-WeO3f1d_azMxyUP8Zouoiu67H5pqJc9f9M91_CVWo_PPVFt_9bmrukwZkdyrZpgWZ90nIXNHM6sB_M4UD8q0X1TZRlVwWqWZRk";
 
 export default function ResultsTopbar() {
+  const { user } = useAuth();
+
   return (
     <header className="fixed top-0 right-0 w-full z-40 bg-surface/70 backdrop-blur-xl shadow-sm hidden md:flex">
       <div className="flex justify-between items-center h-16 px-margin-desktop ml-64 w-full">
@@ -41,13 +47,17 @@ export default function ResultsTopbar() {
           <button className="p-2 rounded-full hover:bg-surface-container-high/50 text-on-surface-variant transition-colors active:scale-95">
             <span className="material-symbols-outlined">help</span>
           </button>
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer">
+          <Link
+            to="/channel"
+            title="Channel data"
+            className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer hover:ring-2 hover:ring-primary transition-all block"
+          >
             <img
               alt="Creator profile"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFlsyHTqpgmCQZ1G2B8qT_x9A4BrkvDQzJ0ClRoCFwxp4NyfWdxWEMrZKpcA5UDh1sBxPqjF17Wlks1gibOoB5sil8bGwLdbsQk4pCQwnwEK2o7iP9tfscZa4YNLcevfHldg_OI_cEFrQ-ilF_-WeO3f1d_azMxyUP8Zouoiu67H5pqJc9f9M91_CVWo_PPVFt_9bmrukwZkdyrZpgWZ90nIXNHM6sB_M4UD8q0X1TZRlVwWqWZRk"
+              src={user?.channel_thumbnail_url || DEFAULT_AVATAR}
             />
-          </div>
+          </Link>
         </div>
       </div>
     </header>

@@ -34,6 +34,7 @@ export default function SignUp() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [channelUrl, setChannelUrl] = useState("");
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -42,7 +43,7 @@ export default function SignUp() {
     setError(null);
     setSubmitting(true);
     try {
-      await signup(fullName, email, password);
+      await signup(fullName, email, password, channelUrl);
       navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
@@ -188,6 +189,29 @@ export default function SignUp() {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-label-md text-label-md text-on-surface block" htmlFor="channelUrl">
+                    YouTube Channel URL
+                  </label>
+                  <div className="relative input-focus-ring rounded-lg border border-outline-variant bg-surface-container-lowest transition-all duration-200">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[20px]">smart_display</span>
+                    </div>
+                    <input
+                      className="block w-full pl-10 pr-3 py-2.5 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder:text-outline"
+                      id="channelUrl"
+                      placeholder="https://www.youtube.com/@yourchannel"
+                      required
+                      type="url"
+                      value={channelUrl}
+                      onChange={(e) => setChannelUrl(e.target.value)}
+                    />
+                  </div>
+                  <p className="font-body-md text-body-md text-xs text-on-surface-variant mt-1">
+                    We'll pull your channel's public stats to personalize your forecasts.
+                  </p>
                 </div>
 
                 <div className="space-y-1.5">

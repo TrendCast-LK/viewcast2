@@ -118,7 +118,7 @@ def _to_channel_data(item: dict) -> ChannelData:
 def fetch_channel_data(channel_url: str) -> ChannelData:
     if not settings.youtube_api_key:
         raise YouTubeError(
-            "No YOUTUBE_API_KEY configured on the server — see backend/.env.example."
+            "No YOUTUBE_API_KEY configured on the server - see backend/.env.example."
         )
 
     lookup = _parse_channel_url(channel_url)

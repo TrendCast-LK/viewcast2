@@ -72,11 +72,11 @@ async function request(path, { method = "GET", json, form, auth = true } = {}) {
 
 // ---- Auth ---------------------------------------------------------------
 
-export function signup({ fullName, email, password }) {
+export function signup({ fullName, email, password, channelUrl }) {
   return request("/auth/signup", {
     method: "POST",
     auth: false,
-    json: { full_name: fullName, email, password },
+    json: { full_name: fullName, email, password, channel_url: channelUrl },
   });
 }
 
@@ -106,6 +106,16 @@ export function changePassword({ currentPassword, newPassword }) {
     method: "POST",
     json: { current_password: currentPassword, new_password: newPassword },
   });
+}
+
+// ---- Channel ----------------------------------------------------------------
+
+export function getChannel() {
+  return request("/channel/me");
+}
+
+export function refreshChannel() {
+  return request("/channel/refresh", { method: "POST" });
 }
 
 // ---- Dashboard ------------------------------------------------------------
