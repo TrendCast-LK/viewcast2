@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models import User
 from app.routers.channel import apply_channel_fetch
 from app.schemas import PasswordChange, ProfileUpdate, Token, UserCreate, UserOut
+from app.services.notifications import notify
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -26,6 +27,14 @@ def signup(payload: UserCreate, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    notify(
+        db,
+        user.id,
+        type="welcome",
+        title="Welcome to ViewCast",
+        message=f"Hey {user.full_name.split()[0]}, your account is ready. Let's predict some views!",
+    )
 
     # Best-effort — a failed lookup doesn't block account creation, see
     # apply_channel_fetch's docstring. The user can retry from the Channel page.
