@@ -1,6 +1,6 @@
 from datetime import datetime, date, time
 
-from sqlalchemy import JSON, Date, DateTime, Float, ForeignKey, Integer, String, Time
+from sqlalchemy import JSON, Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text, Time
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -14,10 +14,31 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(255))
 
-    # Placeholder channel stats shown on the Dashboard screen until a real
-    # YouTube-data integration exists.
+    # Channel stats used as the baseline for prediction forecasts. Seeded
+    # from the real YouTube channel data below when the fetch succeeds;
+    # otherwise these fall back to placeholder defaults and stay editable
+    # from Settings.
     subscribers: Mapped[int] = mapped_column(Integer, default=1_200_000)
     monthly_views: Mapped[int] = mapped_column(Integer, default=45_800_000)
+
+    # The channel URL is required at signup. Everything else here is
+    # populated by app.services.youtube fetching the YouTube Data API v3 —
+    # see app/routers/channel.py. A failed fetch (bad URL, no API key,
+    # channel not found, quota) doesn't block signup; channel_fetch_error
+    # records why, and the user can retry from the Channel page.
+    channel_url: Mapped[str] = mapped_column(String(500))
+    channel_id: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    channel_title: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    channel_description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    channel_thumbnail_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    channel_banner_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    channel_country: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    channel_published_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    channel_view_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    channel_video_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    channel_subscriber_hidden: Mapped[bool] = mapped_column(Boolean, default=False)
+    channel_fetch_error: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    channel_fetched_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
