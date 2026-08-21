@@ -1,5 +1,65 @@
-INFO:     Started server process [32332]
+INFO:     Started server process [22868]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:63448 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60449 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60030 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50446 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57976 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50446 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50446 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "OPTIONS /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "OPTIONS /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "OPTIONS /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58217 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52612 - "OPTIONS /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63499 - "OPTIONS /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63499 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63499 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60625 - "POST /auth/signup HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:60627 - "POST /auth/signup HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63830 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63832 - "POST /predictions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63836 - "POST /predictions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63838 - "POST /predictions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63840 - "POST /predictions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63842 - "POST /predictions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:53101 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53103 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64664 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64664 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64664 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64664 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64664 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62787 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62787 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56436 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56436 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60404 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60404 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49233 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49233 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58326 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58326 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61345 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58326 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58326 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61345 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51418 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51427 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51418 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51427 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52630 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52630 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52630 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52630 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52630 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54527 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52630 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54527 - "GET /predictions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52314 - "GET /trends/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52314 - "GET /trends/summary HTTP/1.1" 200 OK
