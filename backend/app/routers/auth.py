@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.auth import create_access_token, get_current_user, hash_password, verify_password
 from app.database import get_db
 from app.models import User
+from app.routers.channel import apply_channel_fetch
 from app.schemas import PasswordChange, ProfileUpdate, Token, UserCreate, UserOut
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -20,9 +21,15 @@ def signup(payload: UserCreate, db: Session = Depends(get_db)):
         full_name=payload.full_name,
         email=payload.email,
         hashed_password=hash_password(payload.password),
+        channel_url=payload.channel_url,
     )
     db.add(user)
     db.commit()
+    db.refresh(user)
+
+    # Best-effort — a failed lookup doesn't block account creation, see
+    # apply_channel_fetch's docstring. The user can retry from the Channel page.
+    apply_channel_fetch(user, db)
     db.refresh(user)
 
     token = create_access_token(subject=user.email)
