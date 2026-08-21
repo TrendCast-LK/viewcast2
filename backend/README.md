@@ -57,6 +57,9 @@ scaffold, swap in Alembic once the schema needs to evolve carefully).
 | GET | `/trends/summary` | ✓ | Aggregates across the user's predictions — totals, average views/confidence, best category, per-category breakdown, and a timeline for charting |
 | GET | `/channel/me` | ✓ | The user's fetched YouTube channel data |
 | POST | `/channel/refresh` | ✓ | Re-fetch the channel from YouTube (retry after a failure, or pull fresh stats) |
+| GET | `/notifications` | ✓ | The user's notifications (newest first, max 50) + unread count |
+| POST | `/notifications/{id}/read` | ✓ | Mark one notification read |
+| POST | `/notifications/read-all` | ✓ | Mark all notifications read |
 | GET | `/health` | – | Liveness check |
 
 `POST /predictions` is a multipart form matching the "New Prediction" screen:
@@ -89,6 +92,22 @@ Channel URL formats handled: `/channel/UC...`, `/@handle`, `/user/name`, and
 best-effort for legacy `/c/CustomName` (tries it as a handle, then falls back
 to a search — the only reliable way to resolve those without a first-party
 custom-URL lookup endpoint).
+
+## Notifications
+
+`app/services/notifications.py`'s `notify(db, user_id, type, title, message)`
+is called from a few places to create real, persisted notifications: signup
+(welcome + channel fetch outcome), `POST /channel/refresh` (fetch outcome),
+and `POST /predictions` when a forecast completes (not for drafts). The
+frontend's bell icon polls `GET /notifications` and shows an unread badge.
+
+All timestamps sent to the frontend go through a `UTCDatetime` type
+(`app/schemas.py`) that stamps an explicit UTC offset on serialization —
+without it, naive `datetime.utcnow()` values serialize with no offset at all,
+and `new Date(...)` in the browser silently misinterprets them as local time
+(a real bug this project hit: "just now" notifications showed as "6 hours
+ago"). Any new response field holding a `datetime` should use `UTCDatetime`
+too, not the bare type.
 
 ## Project layout
 
