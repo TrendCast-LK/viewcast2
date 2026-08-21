@@ -118,6 +118,20 @@ export function refreshChannel() {
   return request("/channel/refresh", { method: "POST" });
 }
 
+// ---- Notifications ------------------------------------------------------------
+
+export function listNotifications() {
+  return request("/notifications");
+}
+
+export function markNotificationRead(id) {
+  return request(`/notifications/${id}/read`, { method: "POST" });
+}
+
+export function markAllNotificationsRead() {
+  return request("/notifications/read-all", { method: "POST" });
+}
+
 // ---- Dashboard ------------------------------------------------------------
 
 export function getDashboardSummary() {
