@@ -7,6 +7,7 @@ from app.auth import get_current_user
 from app.database import get_db
 from app.models import Prediction, User
 from app.schemas import PredictionOut, PredictionSummary
+from app.services.notifications import notify
 from app.services.prediction_engine import generate_forecast
 from app.utils.files import save_upload, to_url
 
@@ -91,6 +92,15 @@ async def create_prediction(
     db.add(prediction)
     db.commit()
     db.refresh(prediction)
+
+    if not save_as_draft:
+        notify(
+            db,
+            current_user.id,
+            type="prediction_complete",
+            title="Prediction ready",
+            message=f'"{prediction.title}" is predicted to reach {prediction.predicted_views:,} views.',
+        )
 
     return _to_out(prediction)
 
