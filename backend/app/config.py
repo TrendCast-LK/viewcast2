@@ -19,6 +19,11 @@ class Settings(BaseSettings):
 
     upload_dir: Path = BASE_DIR / "uploads"
 
+    # From https://console.cloud.google.com — create a project, enable
+    # "YouTube Data API v3", then create an API key under Credentials.
+    # Without this, channel lookups fail gracefully (see app/services/youtube.py).
+    youtube_api_key: str = ""
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
