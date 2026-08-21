@@ -51,7 +51,7 @@ class UserOut(BaseModel):
     channel_url: str
     channel_title: str | None
     channel_thumbnail_url: str | None
-    created_at: datetime
+    created_at: UTCDatetime
 
 
 class Token(BaseModel):
@@ -86,13 +86,13 @@ class ChannelOut(BaseModel):
     thumbnail_url: str | None
     banner_url: str | None
     country: str | None
-    published_at: datetime | None
+    published_at: UTCDatetime | None
     view_count: int | None
     subscriber_count: int | None
     subscriber_hidden: bool
     video_count: int | None
     fetch_error: str | None
-    fetched_at: datetime | None
+    fetched_at: UTCDatetime | None
 
 
 # ---- Notifications ----------------------------------------------------------
@@ -106,7 +106,7 @@ class NotificationOut(BaseModel):
     title: str
     message: str
     read: bool
-    created_at: datetime
+    created_at: UTCDatetime
 
 
 class NotificationList(BaseModel):
