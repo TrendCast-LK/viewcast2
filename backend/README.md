@@ -102,11 +102,13 @@ app/
   auth.py             Password hashing, JWT issue/verify, get_current_user
   routers/
     auth.py           /auth/*
+    channel.py        /channel/* — also owns apply_channel_fetch(), called from signup
     dashboard.py      /dashboard/*
     predictions.py    /predictions/*
     trends.py         /trends/*
   services/
     prediction_engine.py   Mock forecast generator — TODO: real model here
+    youtube.py              YouTube Data API v3 client + URL parsing
   utils/
     files.py          Upload handling (size limits, unique filenames)
 ```

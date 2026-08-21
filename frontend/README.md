@@ -28,7 +28,8 @@ and predictions (see **Backend integration** below).
 | `/new-prediction` | Create New Prediction (form, incl. file upload) | ✓ |
 | `/prediction-result/:id` | Prediction Results (real forecast + chart) | ✓ |
 | `/trends` | Trends — stat tiles, views-over-time chart, category breakdown | ✓ |
-| `/settings` | Settings — edit profile/channel stats, change password | ✓ |
+| `/settings` | Settings — edit profile/channel stats, appearance, change password | ✓ |
+| `/channel` | Channel — real YouTube channel data (banner, avatar, subscriber/view/video counts). Opens from the avatar icon top-right of any authenticated page. | ✓ |
 
 Protected routes redirect to Sign In if there's no session (`RequireAuth` /
 `AuthContext`), and back to the page you wanted after logging in.
@@ -49,14 +50,21 @@ npm run build            # production build to dist/
 
 - `src/lib/api.js` — thin `fetch` wrapper (`signup`, `login`, `me`,
   `getDashboardSummary`, `createPrediction`, `listPredictions`,
-  `getPrediction`, `deletePrediction`), attaches the bearer token, throws
-  `ApiError` with a readable message on failure.
+  `getPrediction`, `deletePrediction`, `getChannel`, `refreshChannel`),
+  attaches the bearer token, throws `ApiError` with a readable message on
+  failure.
 - `src/context/AuthContext.jsx` — holds the current user + JWT (persisted to
-  `localStorage`), exposes `login`/`signup`/`logout`.
+  `localStorage`), exposes `login`/`signup`/`logout`. `signup` now takes a
+  `channelUrl` too.
 - `src/components/RequireAuth.jsx` — route guard for the pages above.
 - New Prediction's file dropzone sends one file, routed server-side to the
   thumbnail or dataset field by MIME type; the two submit buttons hit the
   same endpoint with `save_as_draft` true/false.
+- Sign Up requires a YouTube channel URL; the backend fetches it via the
+  YouTube Data API right after account creation (needs `YOUTUBE_API_KEY` on
+  the backend — see `../backend/README.md`). If it fails (no key, bad URL,
+  channel not found), signup still succeeds — the Channel page shows the
+  error and a retry button.
 - `VITE_API_URL` (in `.env`) points at the backend — change it if the API
   isn't on `localhost:8000`.
 
