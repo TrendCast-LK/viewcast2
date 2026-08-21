@@ -81,6 +81,25 @@ class ChannelOut(BaseModel):
     fetched_at: datetime | None
 
 
+# ---- Notifications ----------------------------------------------------------
+
+
+class NotificationOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    type: str
+    title: str
+    message: str
+    read: bool
+    created_at: datetime
+
+
+class NotificationList(BaseModel):
+    unread_count: int
+    notifications: list[NotificationOut]
+
+
 # ---- Predictions --------------------------------------------------------
 
 

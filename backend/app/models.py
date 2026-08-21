@@ -47,6 +47,20 @@ class User(Base):
     )
 
 
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+
+    type: Mapped[str] = mapped_column(String(50))  # e.g. "prediction_complete", "channel_fetch_error"
+    title: Mapped[str] = mapped_column(String(255))
+    message: Mapped[str] = mapped_column(Text)
+    read: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
 class Prediction(Base):
     __tablename__ = "predictions"
 
