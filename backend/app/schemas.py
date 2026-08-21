@@ -137,7 +137,7 @@ class PredictionOut(BaseModel):
     confidence: float | None
     change_vs_avg: float | None
     trajectory: list[TrajectoryPoint]
-    created_at: datetime
+    created_at: UTCDatetime
 
 
 class PredictionSummary(BaseModel):
@@ -149,7 +149,7 @@ class PredictionSummary(BaseModel):
     status: str
     predicted_views: int | None
     thumbnail_url: str | None
-    created_at: datetime
+    created_at: UTCDatetime
 
 
 # ---- Trends ---------------------------------------------------------------
@@ -164,7 +164,7 @@ class CategoryBreakdown(BaseModel):
 class TimelinePoint(BaseModel):
     id: int
     title: str
-    created_at: datetime
+    created_at: UTCDatetime
     predicted_views: int
 
 
