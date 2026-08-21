@@ -1,6 +1,20 @@
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timezone
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, PlainSerializer, field_validator
+
+
+def _as_utc_iso(value: datetime) -> str:
+    # Every datetime we store represents UTC (via datetime.utcnow()) but is
+    # naive, so plain serialization omits the offset and browsers parsing it
+    # with `new Date(...)` interpret it as *local* time instead — silently
+    # shifting every timestamp in the UI by the viewer's UTC offset. Stamp
+    # the UTC offset on the way out instead of fixing this at every callsite.
+    aware = value if value.tzinfo is not None else value.replace(tzinfo=timezone.utc)
+    return aware.isoformat()
+
+
+UTCDatetime = Annotated[datetime, PlainSerializer(_as_utc_iso, return_type=str)]
 
 
 # ---- Auth / users -----------------------------------------------------
