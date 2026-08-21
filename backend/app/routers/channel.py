@@ -7,6 +7,7 @@ from app.auth import get_current_user
 from app.database import get_db
 from app.models import User
 from app.schemas import ChannelOut
+from app.services.notifications import notify
 from app.services.youtube import YouTubeError, fetch_channel_data
 
 router = APIRouter(prefix="/channel", tags=["channel"])
@@ -25,6 +26,13 @@ def apply_channel_fetch(user: User, db: Session) -> None:
         user.channel_fetched_at = datetime.utcnow()
         db.add(user)
         db.commit()
+        notify(
+            db,
+            user.id,
+            type="channel_fetch_error",
+            title="Couldn't fetch your channel",
+            message=str(exc),
+        )
         return
 
     user.channel_id = data.channel_id
@@ -49,6 +57,14 @@ def apply_channel_fetch(user: User, db: Session) -> None:
 
     db.add(user)
     db.commit()
+
+    notify(
+        db,
+        user.id,
+        type="channel_fetch_success",
+        title="Channel data ready",
+        message=f"We fetched data for {data.title} — {user.subscribers:,} subscribers.",
+    )
 
 
 def _to_out(user: User) -> ChannelOut:
