@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import NotificationsMenu from "./NotificationsMenu";
+import HelpMenu from "./HelpMenu";
 import { useAuth } from "../context/AuthContext";
 
 const DEFAULT_AVATAR =
@@ -24,12 +26,8 @@ export default function Topbar({ searchPlaceholder = "Search predictions...", av
       </div>
       <div className="flex items-center gap-4">
         <ThemeToggle />
-        <button className="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-colors active:scale-95">
-          <span className="material-symbols-outlined">notifications</span>
-        </button>
-        <button className="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-colors active:scale-95">
-          <span className="material-symbols-outlined">help</span>
-        </button>
+        <NotificationsMenu />
+        <HelpMenu />
         <Link
           to="/channel"
           title="Channel data"
